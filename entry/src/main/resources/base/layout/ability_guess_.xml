@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DirectionalLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:alignment="center"
+    ohos:orientation="vertical">
+
+    <Text
+        ohos:id="$+id:text_helloworld"
+        ohos:height="40vp"
+        ohos:width="300vp"
+        ohos:background_element="$graphic:background_ability_guess_"
+        ohos:bottom_margin="30vp"
+        ohos:layout_alignment="horizontal_center"
+        ohos:text="对方正在绘画中..."
+        ohos:text_size="30vp"
+        />
+
+    <com.example.aircraft_play_demo.MyComponent.DrawBoard
+        ohos:height="450vp"
+        ohos:width="300vp"
+        ohos:background_element="$graphic:background_draw_place"
+        ohos:bottom_margin="20vp"
+        ohos:layout_alignment="horizontal_center"
+        />
+
+    <DirectionalLayout
+        xmlns:ohos="http://schemas.huawei.com/res/ohos"
+        ohos:height="match_parent"
+        ohos:width="match_parent"
+        ohos:alignment="center"
+        ohos:orientation="horizontal">
+
+        <TextField
+            ohos:id="$+id:txt_answer"
+            ohos:height="30vp"
+            ohos:width="100vp"
+            ohos:background_element="$graphic:background_ability_main"
+            ohos:hint="答题区"
+            ohos:layout_alignment="horizontal_center"
+            ohos:text_size="20vp"
+            />
+
+        <Button
+            ohos:id="$+id:btn_push_answer"
+            ohos:height="30vp"
+            ohos:width="100vp"
+            ohos:layout_alignment="horizontal_center"
+            ohos:text="确定"
+            ohos:text_size="20vp"
+            />
+    </DirectionalLayout>
+
+</DirectionalLayout>

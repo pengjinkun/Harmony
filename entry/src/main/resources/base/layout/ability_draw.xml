@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<DirectionalLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:alignment="center"
+    ohos:background_element="$graphic:background_back"
+    ohos:orientation="vertical"
+    >
+
+
+    <com.example.aircraft_play_demo.MyComponent.DrawContainer
+        ohos:id="$+id:drawing_board"
+        ohos:height="550vp"
+        ohos:width="300vp"
+        ohos:background_element="$graphic:background_draw_place"
+        ohos:bottom_margin="50vp"
+        ohos:layout_alignment="horizontal_center"
+        />
+
+<!--    <Button-->
+<!--        ohos:id="$+id:btn_connect"-->
+<!--        ohos:height="match_content"-->
+<!--        ohos:width="match_content"-->
+<!--        ohos:text="寻找队友"-->
+<!--        ohos:text_size="30vp"-->
+<!--        ohos:background_element="$graphic:background_ability_button"-->
+<!--        />-->
+
+    <!--    </DirectionalLayout>-->
+</DirectionalLayout>
