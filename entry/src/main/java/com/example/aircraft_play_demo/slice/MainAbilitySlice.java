@@ -4,13 +4,16 @@ import com.example.aircraft_play_demo.MainAbility;
 import com.example.aircraft_play_demo.ResourceTable;
 import com.example.aircraft_play_demo.devices.SelectDeviceDialog;
 import ohos.aafwk.ability.AbilitySlice;
+import ohos.aafwk.ability.IAbilityConnection;
 import ohos.aafwk.content.Intent;
 import ohos.aafwk.content.Operation;
 import ohos.agp.components.Component;
+import ohos.bundle.ElementName;
 import ohos.data.distributed.common.KvManagerConfig;
 import ohos.data.distributed.common.KvManagerFactory;
 import ohos.distributedschedule.interwork.DeviceInfo;
 import ohos.distributedschedule.interwork.DeviceManager;
+import ohos.rpc.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
 public class MainAbilitySlice extends AbilitySlice {
 
     private List<DeviceInfo> devices = new ArrayList<>();
+
     @Override
     public void onStart(Intent intent) {
         requestPermissionsFromUser(new String[]{"ohos.permission.DISTRIBUTED_DATASYNC"}, 0);
@@ -43,7 +47,7 @@ public class MainAbilitySlice extends AbilitySlice {
 //        findComponentById(ResourceTable.Id_draw_guess).setClickedListener(new ButtonClick());
     }
 
-    private void open_draw(){
+    private void open_draw() {
         Intent draw_Intent = new Intent();
         Operation operation_Draw = new Intent.OperationBuilder().withBundleName(getBundleName())
                 .withAbilityName(MainAbility.class.getName())
@@ -53,7 +57,7 @@ public class MainAbilitySlice extends AbilitySlice {
         startAbility(draw_Intent);
     }
 
-    private void open_guess(){
+    private void open_guess() {
         Intent guess_Intent = new Intent();
         Operation operationGuess = new Intent.OperationBuilder().withBundleName(getBundleName())
                 .withAbilityName(MainAbility.class.getName())
@@ -81,7 +85,6 @@ public class MainAbilitySlice extends AbilitySlice {
     }
 
 
-
     private void getDevices(int game_type) {
         if (devices.size() > 0) {
             devices.clear();
@@ -94,33 +97,35 @@ public class MainAbilitySlice extends AbilitySlice {
 
     private void showDevicesDialog(int game_type) {
         new SelectDeviceDialog(this, devices, deviceInfo -> {
-            startLocalFa(deviceInfo.getDeviceId(),game_type);
-            startRemoteFa(deviceInfo.getDeviceId(),game_type);
+            startLocalFa(deviceInfo.getDeviceId(), game_type);
+            startRemoteFa(deviceInfo.getDeviceId(), game_type);
         }).show();
     }
 
-    private void startLocalFa(String deviceId,int game_type) {
+    private void startLocalFa(String deviceId, int game_type) {
         Intent intent = new Intent();
         Operation operation = new Intent.OperationBuilder().withBundleName(getBundleName())
                 .withAbilityName(MainAbility.class.getName())
-                .withAction((game_type==ResourceTable.Id_btn_1)?"action.system.draw":"action.system.guess")
+                .withAction((game_type == ResourceTable.Id_btn_1) ? "action.system.draw" : "action.system.guess")
                 .build();
         intent.setOperation(operation);
         startAbility(intent);
     }
 
-    private void startRemoteFa(String deviceId,int game_type) {
+    private void startRemoteFa(String deviceId, int game_type) {
 //        String localDeviceId =
 //                KvManagerFactory.getInstance().createKvManager(new KvManagerConfig(this)).getLocalDeviceInfo().getId();
         Intent intent = new Intent();
         Operation operation = new Intent.OperationBuilder().withDeviceId(deviceId)
                 .withBundleName(getBundleName())
                 .withAbilityName(MainAbility.class.getName())
-                .withAction((game_type==ResourceTable.Id_btn_1)?"action.system.guess":"action.system.draw")
+                .withAction((game_type == ResourceTable.Id_btn_1) ? "action.system.guess" : "action.system.draw")
                 .withFlags(Intent.FLAG_ABILITYSLICE_MULTI_DEVICE)
                 .build();
         intent.setOperation(operation);
         startAbility(intent);
     }
+
+
 
 }

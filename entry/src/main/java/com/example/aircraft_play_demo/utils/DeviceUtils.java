@@ -60,4 +60,20 @@ public class DeviceUtils {
         return intent;
     }
 
+    public static List<String> getAvailableDeviceId() {
+        List<String> deviceIds = new ArrayList<>();
+        List<DeviceInfo> deviceInfoList = DeviceManager.getDeviceList(DeviceInfo.FLAG_GET_ONLINE_DEVICE);
+        if (deviceInfoList == null) {
+            return deviceIds;
+        }
+//        String localDeviceId = getLocalDeviceId();
+        if (deviceInfoList.size() == 0) {
+            return deviceIds;
+        }
+
+        for (DeviceInfo deviceInfo : deviceInfoList) {
+            deviceIds.add(deviceInfo.getDeviceId());
+        }
+        return deviceIds;
+    }
 }

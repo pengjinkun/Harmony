@@ -8,9 +8,14 @@ import com.example.aircraft_play_demo.MyComponent.DrawContainer;
 import com.example.aircraft_play_demo.ResourceTable;
 import com.example.aircraft_play_demo.devices.SelectDeviceDialog;
 import com.example.aircraft_play_demo.utils.DBUtils;
+import com.example.aircraft_play_demo.utils.DeviceUtils;
 import ohos.aafwk.ability.AbilitySlice;
+import ohos.aafwk.ability.IAbilityContinuation;
 import ohos.aafwk.content.Intent;
+import ohos.aafwk.content.IntentParams;
 import ohos.aafwk.content.Operation;
+import ohos.agp.components.Button;
+import ohos.agp.components.Component;
 import ohos.agp.components.Text;
 import ohos.app.Context;
 import ohos.data.distributed.common.*;
@@ -22,34 +27,36 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawAbilitySlice extends AbilitySlice {
-    private SingleKvStore singleKvStore = null;
+public class DrawAbilitySlice extends AbilitySlice implements IAbilityContinuation {
     private List<DeviceInfo> devices = new ArrayList<>();
+    String otherDeviceId;
 
     @Override
     public void onStart(Intent intent) {
         requestPermissionsFromUser(new String[]{"ohos.permission.DISTRIBUTED_DATASYNC"}, 0);
         super.onStart(intent);
         super.setUIContent(ResourceTable.Layout_ability_draw);
-        singleKvStore = DBUtils.initOrGetDB(this,"RecordAccouontsDB");
-//        //分布式数据库管理器
-//        Context context;
-//        KvManagerConfig config = new KvManagerConfig(context);
-//        KvManager kvManager = KvManagerFactory.getInstance().createKvManager(config);
-//        Options CREATE = new Options();
-//        //分布式数据库
-//        CREATE.setCreateIfMissing(true).setEncrypt(false).setKvStoreType(KvStoreType.SINGLE_VERSION);
-//        String storeID = "testApp";
-//        SingleKvStore singleKvStore = kvManager.getKvStore(CREATE, storeID);
-//
-//        String key = "answer";
-//        String value = ((Text)findComponentById(ResourceTable.Id_txt_answer)).getText();
-//        singleKvStore.putString(key, value);
-//        key = "path";
-//        ArrayList<DrawBoard.paintData> value_paint = ((DrawContainer)findComponentById(ResourceTable.Id_drawing_board)).board.PaintedList;
-
+        Button button = (Button) findComponentById(ResourceTable.Id_btn_connect);
+        // 点击迁移
+        button.setClickedListener(new Component.ClickedListener() {
+            @Override
+            public void onClick(Component component) {
+                continueAbility(getDeviceId());
+            }
+        });
     }
 
+    private String getDeviceId(){
+        String deviceId = "";
+        List<String> outerDevices = DeviceUtils.getAvailableDeviceId();
+        if (outerDevices == null || outerDevices.size() == 0){
+        }else {
+            for (String item : outerDevices) {
+            }
+            deviceId = outerDevices.get(0);
+        }
+        return deviceId;
+    };
     @Override
     public void onActive() {
         super.onActive();
@@ -94,6 +101,7 @@ public class DrawAbilitySlice extends AbilitySlice {
         String localDeviceId =
                 KvManagerFactory.getInstance().createKvManager(new KvManagerConfig(this)).getLocalDeviceInfo().getId();
         Intent intent = new Intent();
+        otherDeviceId = localDeviceId;
         intent.setParam("remoteDeviceId", localDeviceId);
         intent.setParam("isLocal", false);
         Operation operation = new Intent.OperationBuilder().withDeviceId(deviceId)
@@ -106,4 +114,23 @@ public class DrawAbilitySlice extends AbilitySlice {
         startAbility(intent);
     }
 
+    @Override
+    public boolean onStartContinuation() {
+        return false;
+    }
+
+    @Override
+    public boolean onSaveData(IntentParams intentParams) {
+        return false;
+    }
+
+    @Override
+    public boolean onRestoreData(IntentParams intentParams) {
+        return false;
+    }
+
+    @Override
+    public void onCompleteContinuation(int i) {
+
+    }
 }
